@@ -32,7 +32,7 @@ that were not running) and the three running images that moved between the two d
   (`MASTER-image-list.txt`, `rke2-images-all.txt`), before the page settled on `all-images.txt`.
 - `replay-20261012/`: the same inventories for the replay, in the final layout of the page.
 - `sbom-samples/`: four per-image SBOMs, small enough for git: the workload image (`nginx:1.27`, 89
-  packages, the control file of `tests/06-validators-negative-control.sh`), the smallest management
+  packages, the control file of the negative control of step 7), the smallest management
   image (`mirrored-calico-pod2daemon-flexvol`, 6 packages), and the pair of the offline scan of runbook
   section 3.3 (`kube-vip:v0.8.0` from the EIB registry archive and from the registry, 97 packages each,
   same package list).

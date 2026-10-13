@@ -1,6 +1,6 @@
 # Scenario 6 for Edge 3.5 and Edge 3.6
 
-[Scenario 6](runbook.md) describes the full SBOM collection for a Metal3/CAPI
+[The runbook](../README.md) describes the full SBOM collection for a Metal3/CAPI
 stack; its commands and example outputs carry the Edge 3.5.2 values observed on its bench. This page
 gives the values of Edge 3.5.2 and Edge 3.6.1 side by side, and the places where the release notes
 and the registry disagree. Every step of scenario 6 not listed here applies unchanged.
@@ -67,7 +67,7 @@ TURTLES_PROVIDERS_CHART=306.0.7+up0.26.2
 SLMICRO_VERSION=6.2
 ```
 
-`examples/collect-metal3-sbom.sh` reads `EDGE_VERSION` (default `3.5`) to pick the EIB image of
+`../examples/collect-metal3-sbom.sh` reads `EDGE_VERSION` (default `3.5`) to pick the EIB image of
 Layer 2. `EIB_CONTAINER_IMAGE` still overrides it.
 
 ## Changes per layer

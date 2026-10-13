@@ -1,80 +1,56 @@
 # Full SBOM of a SUSE Edge Metal3/CAPI stack
 
-One SPDX 2.3 document for a whole Metal3/CAPI deployment, from the Edge Image Builder (EIB) images to the
-workloads of the downstream clusters, merged from one SBOM per layer and validated with standard tools
-(`pyspdxtools` for SPDX validity, `ntia-checker` for the NTIA minimum elements).
+**Question:** how to produce one complete SBOM of a Metal3/CAPI deployment, from the EIB images to the workloads of the downstream clusters, that a reader can validate with standard tools.
 
-Replayed on SUSE Edge 3.5.2 (management cluster on 2026-10-09, downstream cluster and workload on
-2026-10-12, whole page from an empty directory on 2026-10-12). The Edge 3.6.1 values are listed but
-have not been run on a bench.
+**Result:** one SPDX 2.3 document, `sbom-global.spdx.json`, merged from one SBOM per layer, that passes `pyspdxtools` (SPDX validity) and `ntia-checker` (NTIA minimum elements), plus the per-layer SBOMs and the inventories it was built from.
 
-## Layout
+**Scope:** a stack built with Edge Image Builder (EIB) and provisioned with Metal3 and Cluster API (CAPI) as in the [Metal3 quickstart](https://documentation.suse.com/suse-edge/3.5/html/edge/quickstart-metal3.html): a management cluster (RKE2, Rancher, Metal3, CAPI providers) and the downstream clusters it provisions. Replayed on SUSE Edge 3.5.2; the Edge 3.6.1 values are listed in [analysis/edge-release-values.md](analysis/edge-release-values.md) and have not been run on a bench.
 
-| Directory | Content |
-|---|---|
-| [`docs/runbook.md`](docs/runbook.md) | The procedure: prerequisites, build-time layers, management cluster, downstream cluster, workload, merge, validation, hand-over, deviations observed on the bench. Every example output is marked **Observed** with its date, or **Not replayed**. |
-| [`docs/edge-release-values.md`](docs/edge-release-values.md) | Edge 3.5.2 and 3.6.1 values side by side (EIB, RKE2, charts, images), with the evidence of each value. |
-| [`docs/analysis-cve-licences-signing.md`](docs/analysis-cve-licences-signing.md) | What to do with the SBOM: CVEs against the SUSE OVAL feeds, licences per layer, drift, air-gap, cosign attestations. Nothing there is needed to produce the SBOM. |
-| [`docs/cve-databases-comparison.md`](docs/cve-databases-comparison.md) | Why Grype and Trivy are silent on SL Micro 6.x and SLES 16 RPMs, and which feeds are authoritative. |
-| [`scripts/run-scenario-6.sh`](scripts/run-scenario-6.sh) | Sections 2 to 6 and 8 of the runbook in one script, variables of section 1 in the environment. |
-| [`examples/collect-metal3-sbom.sh`](examples/collect-metal3-sbom.sh) | Older per-layer collector (OS, EIB, RKE2 bundles, charts, images, CAPI) that reads a `metal3-demo` working directory; it redacts the SCC registration code of the rendered EIB definition. Kept as an example of the per-layer index it produces; the merged document comes from the runbook. |
-| [`tests/`](tests/README.md) | One script per check of the runbook (SPDX validity, NTIA conformance, no empty input, roots = inputs, no build-host path) plus a negative control of the validators. `bash tests/run-all.sh WORK` runs them. |
-| [`examples/edge-3.5.2-bench-2026-10-12/`](examples/edge-3.5.2-bench-2026-10-12/README.md) | Outputs of the three bench runs: logs, validation logs, inventories, scripts as run, four sample per-image SBOMs, package counts of all 126 SBOMs, checksums of the two global documents. |
+**Tools:** syft 1.42.3, jq, zstd, kubectl, helm, python3 with spdx-tools 0.8.5 and ntia-conformance-checker 6.0.0 for the validation.
 
-## Quick start
+## Steps, in the order of the collection
 
-On the build host (where EIB built the images and where the management kubeconfig is):
+Each directory holds the section of the runbook as its README and the script that runs its commands. Every example output is marked **Observed** with its date, or **Not replayed**. Source the variables of step 1 once, then run the scripts in order on the build host.
+
+| Step | Directory | Does | Script |
+|---|---|---|---|
+| 1 | [01-prerequisites](01-prerequisites/README.md) | tools and variables | `env.sh`, to source |
+| 2 | [02-build-time-layers](02-build-time-layers/README.md) | OS packages of the EIB image, images embedded by EIB, EIB tool image kept apart | `build-time-layers.sh` |
+| 3 | [03-management-cluster](03-management-cluster/README.md) | inventories, master image list, one SBOM per running image | `management-cluster.sh` |
+| 4 | [04-downstream-cluster](04-downstream-cluster/README.md) | kubeconfig of the downstream cluster, then steps 2 and 3 on it | `downstream-cluster.sh` |
+| 5 | [05-workload](05-workload/README.md) | the workload alone | `workload.sh` |
+| 6 | [06-merge](06-merge/README.md) | one global SPDX document with its sha256 | `merge.sh` |
+| 7 | [07-validate](07-validate/README.md) | SPDX validity, NTIA conformance, the hand-over checks | `validate.sh` |
+| 8 | [08-hand-over](08-hand-over/README.md) | what to deliver | |
+| 9 | [09-deviations](09-deviations/README.md) | deviations observed on the bench, limitations, observed values | |
 
 ```bash
-# tools (runbook, section 1)
-curl -sSfL https://raw.githubusercontent.com/anchore/syft/main/install.sh | sh -s -- -b "$HOME/.local/bin" v1.42.3
-python3 -m venv "$HOME/sbomval"
-"$HOME/sbomval/bin/pip" install -q spdx-tools==0.8.5 ntia-conformance-checker==6.0.0
-sudo zypper -n in jq zstd
-
-# variables (runbook, section 1): adapt the paths to your deployment
-export EDGE_VERSION=3.5.2
-export EIB_IMAGE=registry.suse.com/edge/3.5/edge-image-builder:1.3.3
-export EIB_MGMT_DIR="$HOME/eib/mgmt"
-export EIB_DS_DIR="$HOME/eib/metal3"
-export MGMT_RAW="$EIB_MGMT_DIR/SL-Micro.x86_64-6.2-Base-GM.mgmt.raw"
-export DS_RAW="$EIB_DS_DIR/SL-Micro.x86_64-6.2-Base-GM.metal3.raw"
-export MGMT_KUBECONFIG="$HOME/.kube/mgmt.config"
-export WORK="$HOME/metal3-sbom"
-export DS_CLUSTER=sample-cluster DS_NS=default WL_NS=my-app
-
-# produce (sections 2 to 6 and 8), then validate (section 7 and the hand-over checklist)
-bash scripts/run-scenario-6.sh 2>&1 | tee "$WORK.log"
-bash tests/run-all.sh "$WORK"
+source 01-prerequisites/env.sh
+bash 02-build-time-layers/build-time-layers.sh
+bash 03-management-cluster/management-cluster.sh
+bash 04-downstream-cluster/downstream-cluster.sh
+bash 05-workload/workload.sh
+bash 06-merge/merge.sh
+bash 07-validate/validate.sh
 ```
 
-The result is `$WORK/sbom-global.spdx.json` with its `.sha256`, the per-layer SBOMs under
-`$WORK/{mgmt,downstream,workload}/`, the inventories next to them, and `$WORK/sbom-eib-tool.spdx.json`
-kept apart as build provenance. Section 8 of the runbook lists what to hand over.
+## Status on the Edge 3.5.2 bench
 
-## Figures observed on the Edge 3.5.2 bench
+| Section | Replayed | Where and when |
+|---|---|---|
+| 2. Build-time layers | Yes | Edge 3.5.2 bench, 2026-10-09; offline scan of an embedded image on 2026-10-12 |
+| 3. Management cluster at runtime | Yes | Edge 3.5.2 bench, 2026-10-09 |
+| 4. Downstream cluster and 5. workload | Yes | Edge 3.5.2 bench, 2026-10-12, after the downstream image was rebuilt as in the product definition (step 9, item 1) |
+| 6. Merge and 7. validation, management cluster alone | Yes | 2026-10-09: 36 inputs, 8482 packages, `pyspdxtools` rc=0, `ntia-checker` Conformant: True |
+| 6. Merge and 7. validation, whole stack | Yes | 2026-10-12: 50 inputs, 9374 packages, 43 roots, 107 MB, `pyspdxtools` rc=0 in 47 min, `ntia-checker` Conformant: True |
+| Replay of the whole page from an empty directory | Yes | 2026-10-12: 69 inputs, 11409 packages, 58 roots, 112 MB, `pyspdxtools` rc=0 in 51 min, `ntia-checker` Conformant: True |
+| Edge 3.6.1 values | No | release notes and registry only |
 
-| Document | Inputs | Packages | Roots | Size | `pyspdxtools` | `ntia-checker` |
-|---|---|---|---|---|---|---|
-| management cluster, 2026-10-09 | 36 | 8482 | 36 | 100 MB | rc=0, 41 min 43 s | Conformant: True |
-| whole stack, 2026-10-12 | 50 | 9374 | 43 | 107 MB | rc=0, 47 min 16 s | Conformant: True |
-| replay from an empty directory, 2026-10-12 | 69 | 11409 | 58 | 112 MB | rc=0, 50 min 56 s | Conformant: True |
+The scripts of steps 2 to 7 carry the blocks of their README; the same sequence, with the bench paths, was run from an empty directory on 2026-10-12 ([examples/.../scripts-as-run/replay-20261012.sh](examples/edge-3.5.2-bench-2026-10-12/scripts-as-run/replay-20261012.sh)). The scripts as split here have not been run as such. Package counts depend on the syft version: do not compare them across versions.
 
-Package counts depend on the syft version (1.42.3 here); do not compare them with documents produced by
-another version.
+## Other material
 
-## Known limitations
+- [analysis/](analysis/): what to do with the SBOM (CVEs against the SUSE OVAL feeds, licences per layer, drift, air-gap, cosign attestations), the Edge 3.5.2 and 3.6.1 values side by side, and why Grype and Trivy are silent on SL Micro 6.x and SLES 16 RPMs. Nothing there is needed to produce the SBOM.
+- [examples/edge-3.5.2-bench-2026-10-12/](examples/edge-3.5.2-bench-2026-10-12/README.md): outputs of the three bench runs (logs, validation logs, inventories, scripts as run, four sample per-image SBOMs, package counts of all 126 SBOMs, checksums of the two global documents). [examples/collect-metal3-sbom.sh](examples/collect-metal3-sbom.sh) is an older per-layer collector that produces an index, not a merged document.
 
-From section 9 of the runbook: the running image list is a snapshot (CronJob pods and Rancher system-chart
-upgrades move it between two runs; record the digests and date the document); the merged document
-changes at every run (namespace, timestamp), compare package lists, not files; artefacts that are neither
-RPM packages nor container images (the RKE2 tarball embedded by EIB, the Ironic Python Agent kernel and
-initramfs served by the `ironic` pod) are not in the document; an ISO-based management image has no
-partition to mount, scan the installed node instead (not replayed).
-
-## Provenance
-
-Extracted from the scenario 6 pages of a private presales repository, as replayed on the Edge 3.5.2 bench
-between 2026-10-09 and 2026-10-12. The product references are the
-[SUSE Edge 3.5 Metal3 quickstart](https://documentation.suse.com/suse-edge/3.5/html/edge/quickstart-metal3.html)
-and [SUSE Linux Enterprise and SBOM support](https://www.suse.com/support/security/sbom/).
+Product references: [SUSE Edge 3.5 Metal3 quickstart](https://documentation.suse.com/suse-edge/3.5/html/edge/quickstart-metal3.html), [SUSE Linux Enterprise and SBOM support](https://www.suse.com/support/security/sbom/).

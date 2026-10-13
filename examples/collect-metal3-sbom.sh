@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# collect-metal3-sbom.sh — Build-time SBOM collection for a Metal3/CAPI deployment
+# collect-metal3-sbom.sh: Build-time SBOM collection for a Metal3/CAPI deployment
 #
 # Collects SBOMs from every layer of the SUSE Edge Metal3 stack:
 #   Layer 1: Base OS image (RPM packages)
@@ -31,7 +31,7 @@ TIMESTAMP=$(date -u +%Y%m%dT%H%M%SZ)
 mkdir -p "${SBOM_DIR}"/{os,rke2,helm,containers,capi,aggregate}
 
 echo "============================================================"
-echo "  Metal3/CAPI SBOM Collection — ${TIMESTAMP}"
+echo "  Metal3/CAPI SBOM Collection: ${TIMESTAMP}"
 echo "  Working dir: ${WORKING_DIR}"
 echo "  Output:      ${SBOM_DIR}"
 echo "============================================================"
@@ -50,7 +50,7 @@ if command -v kubectl >/dev/null 2>&1 && kubectl get nodes >/dev/null 2>&1; then
 fi
 
 # ---------------------------------------------------------------------------
-# Layer 1: Base OS image — RPM manifest from EIB build artefacts
+# Layer 1: Base OS image: RPM manifest from EIB build artefacts
 # ---------------------------------------------------------------------------
 echo ""
 echo ">>> Layer 1: Base OS image (RPM packages)"
@@ -111,9 +111,9 @@ echo ""
 echo ">>> Layer 2: EIB tool + embedded container images"
 
 # Detect EIB image from podman history or metal3-demo defaults
-# The EIB config does NOT contain the tool image ref — it's in the Ansible role defaults
+# The EIB config does NOT contain the tool image ref: it's in the Ansible role defaults
 # EDGE_VERSION picks the EIB image of the latest z-release (see
-# docs/edge-release-values.md). EIB_CONTAINER_IMAGE wins.
+# analysis/edge-release-values.md). EIB_CONTAINER_IMAGE wins.
 EDGE_VERSION="${EDGE_VERSION:-3.5}"
 case "${EDGE_VERSION}" in
   3.5) EIB_DEFAULT="registry.suse.com/edge/3.5/edge-image-builder:1.3.3" ;;
@@ -159,7 +159,7 @@ echo "  RKE2 version: ${RKE2_VERSION}"
 echo "${RKE2_VERSION}" > "${SBOM_DIR}/rke2/rke2-version.txt"
 
 if [ "${CLUSTER_UP}" = true ]; then
-  echo "  Cluster reachable — extracting live image list..."
+  echo "  Cluster reachable: extracting live image list..."
   kubectl get pods -A -o jsonpath='{range .items[*]}{range .spec.containers[*]}{.image}{"\n"}{end}{range .spec.initContainers[*]}{.image}{"\n"}{end}{end}' \
     | sort -u > "${SBOM_DIR}/rke2/cluster-running-images.txt"
   echo "  Running images: $(wc -l < "${SBOM_DIR}/rke2/cluster-running-images.txt" | tr -d ' ')"
@@ -167,7 +167,7 @@ if [ "${CLUSTER_UP}" = true ]; then
   kubectl get pods -n kube-system -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{range .spec.containers[*]}{.image}{"\n"}{end}{end}' \
     > "${SBOM_DIR}/rke2/rke2-system-pods.txt"
 else
-  echo "  Cluster not reachable — using EIB build artefacts"
+  echo "  Cluster not reachable: using EIB build artefacts"
 fi
 
 # ---------------------------------------------------------------------------
@@ -226,7 +226,7 @@ PYEOF
 fi
 
 # ---------------------------------------------------------------------------
-# Layer 5: Container images — SPDX SBOM per image
+# Layer 5: Container images: SPDX SBOM per image
 # ---------------------------------------------------------------------------
 echo ""
 echo ">>> Layer 5: Container image SBOMs"
@@ -289,7 +289,7 @@ else
         FAILED="${FAILED}\n${IMG} (empty output)"
       fi
     else
-      echo "           FAILED — trying trivy fallback..."
+      echo "           FAILED: trying trivy fallback..."
       if command -v trivy >/dev/null 2>&1; then
         trivy image --format spdx-json --output "${OUTFILE}" "${IMG}" -q 2>/dev/null && \
           echo "           OK (trivy)" || { FAILED="${FAILED}\n${IMG}"; echo "           FAILED"; }
@@ -318,7 +318,7 @@ if [ "${CLUSTER_UP}" = true ]; then
   echo "  CRDs: $(wc -l < "${SBOM_DIR}/capi/capi-crds.txt" 2>/dev/null | tr -d ' ')"
   echo "  Controller pods: $(wc -l < "${SBOM_DIR}/capi/capi-controller-images.txt" 2>/dev/null | tr -d ' ')"
 else
-  echo "  Cluster not reachable — CAPI inventory skipped (re-run after step 04)"
+  echo "  Cluster not reachable: CAPI inventory skipped (re-run after step 04)"
 fi
 
 # ---------------------------------------------------------------------------
@@ -402,7 +402,7 @@ with open(out, "w") as f:
 
 summary = os.path.join(SBOM_DIR, "aggregate", "SUMMARY.txt")
 with open(summary, "w") as f:
-    f.write(f"SUSE Edge Metal3/CAPI Stack — SBOM Summary\n")
+    f.write(f"SUSE Edge Metal3/CAPI Stack: SBOM Summary\n")
     f.write(f"Generated: {TIMESTAMP}\n")
     f.write(f"RKE2: {RKE2_VERSION}\n\n")
     f.write(f"OS packages:        {os_packages}\n")
