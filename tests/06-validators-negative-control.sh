@@ -4,7 +4,7 @@
 # pyspdxtools, and three packages without supplier fail the NTIA check. Run on 2026-10-12 on the nginx
 # image SBOM of the Edge 3.5.2 bench (89 packages): untouched rc=0 / Conformant: True, broken relationship
 # rc=1 "The document is invalid", suppliers removed Conformant: False rc=1.
-# Usage: tests/06-validators-negative-control.sh [SBOM]
+# Usage: bash tests/06-validators-negative-control.sh [SBOM]
 #   SBOM = a per-image SPDX JSON (default: the nginx sample shipped under examples/)
 # Env:   SBOMVAL = bin directory of the validation venv (default: $HOME/sbomval/bin)
 set -euo pipefail

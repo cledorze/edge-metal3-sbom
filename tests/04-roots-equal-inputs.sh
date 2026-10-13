@@ -2,7 +2,7 @@
 # Test 4: the DESCRIBES roots of the global SBOM = the distinct roots of its inputs (runbook, section 8 checklist).
 # An image scanned in two clusters has the same root identifier in both SBOMs and counts once after the merge:
 # on the Edge 3.5.2 bench, 50 inputs gave 43 roots (7 images shared by the management and downstream clusters).
-# Usage: tests/04-roots-equal-inputs.sh [WORK]
+# Usage: bash tests/04-roots-equal-inputs.sh [WORK]
 set -euo pipefail
 WORK="${1:-${WORK:-$PWD}}"
 cd "$WORK"

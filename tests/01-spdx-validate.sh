@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Test 1: SPDX validity of the global SBOM (runbook, section 7).
 # pyspdxtools prints nothing and returns 0 when the document is valid; errors are listed otherwise.
-# Usage: tests/01-spdx-validate.sh [WORK]   (WORK = output directory of the runbook, default: $PWD)
+# Usage: bash tests/01-spdx-validate.sh [WORK]   (WORK = output directory of the runbook, default: $PWD)
 # Env:   SBOMVAL = bin directory of the validation venv (default: $HOME/sbomval/bin)
 set -euo pipefail
 WORK="${1:-${WORK:-$PWD}}"

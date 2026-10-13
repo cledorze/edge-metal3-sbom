@@ -14,7 +14,7 @@ argument or taken from `$PWD`.
 | `05-no-host-paths.sh` | no host name, mount path or `$HOME` in the text, no root named after a path | 8 | 0 and 0 on the replayed document (2026-10-12) |
 | `06-validators-negative-control.sh` | the two validators fail on a broken document (control of tests 1 and 2) | 7 | rc=1 and `Conformant: False` on the nginx image SBOM (2026-10-12) |
 
-`run-all.sh` runs 3, 4, 5 first (seconds), then 1 and 2 (minutes to an hour on a whole-stack
+`bash tests/run-all.sh WORK` runs 3, 4, 5 first (seconds), then 1 and 2 (minutes to an hour on a whole-stack
 document), then 6 on the sample SBOM shipped under `examples/`.
 
 Requirements: `jq`, and the validation venv of runbook section 1
@@ -24,11 +24,11 @@ Requirements: `jq`, and the validation venv of runbook section 1
 ```bash
 python3 -m venv "$HOME/sbomval"
 "$HOME/sbomval/bin/pip" install -q spdx-tools==0.8.5 ntia-conformance-checker==6.0.0
-tests/run-all.sh "$HOME/metal3-sbom"
+bash tests/run-all.sh "$HOME/metal3-sbom"
 ```
 
 Test 6 runs without any SBOM of your own:
 
 ```bash
-tests/06-validators-negative-control.sh
+bash tests/06-validators-negative-control.sh
 ```

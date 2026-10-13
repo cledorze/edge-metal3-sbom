@@ -18,7 +18,7 @@ have not been run on a bench.
 | [`docs/cve-databases-comparison.md`](docs/cve-databases-comparison.md) | Why Grype and Trivy are silent on SL Micro 6.x and SLES 16 RPMs, and which feeds are authoritative. |
 | [`scripts/run-scenario-6.sh`](scripts/run-scenario-6.sh) | Sections 2 to 6 and 8 of the runbook in one script, variables of section 1 in the environment. |
 | [`scripts/collect-metal3-sbom.sh`](scripts/collect-metal3-sbom.sh) | Older per-layer collector (OS, EIB, RKE2 bundles, charts, images, CAPI) that reads a `metal3-demo` working directory; it redacts the SCC registration code of the rendered EIB definition. Kept for the index it produces; the merged document comes from the runbook. |
-| [`tests/`](tests/README.md) | One script per check of the runbook (SPDX validity, NTIA conformance, no empty input, roots = inputs, no build-host path) plus a negative control of the validators. `tests/run-all.sh WORK` runs them. |
+| [`tests/`](tests/README.md) | One script per check of the runbook (SPDX validity, NTIA conformance, no empty input, roots = inputs, no build-host path) plus a negative control of the validators. `bash tests/run-all.sh WORK` runs them. |
 | [`examples/edge-3.5.2-bench-2026-10-12/`](examples/edge-3.5.2-bench-2026-10-12/README.md) | Outputs of the three bench runs: logs, validation logs, inventories, scripts as run, four sample per-image SBOMs, package counts of all 126 SBOMs, checksums of the two global documents. |
 
 ## Quick start
@@ -44,8 +44,8 @@ export WORK="$HOME/metal3-sbom"
 export DS_CLUSTER=sample-cluster DS_NS=default WL_NS=my-app
 
 # produce (sections 2 to 6 and 8), then validate (section 7 and the hand-over checklist)
-scripts/run-scenario-6.sh 2>&1 | tee "$WORK.log"
-tests/run-all.sh "$WORK"
+bash scripts/run-scenario-6.sh 2>&1 | tee "$WORK.log"
+bash tests/run-all.sh "$WORK"
 ```
 
 The result is `$WORK/sbom-global.spdx.json` with its `.sha256`, the per-layer SBOMs under

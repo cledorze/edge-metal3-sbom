@@ -11,10 +11,10 @@ export SBOMVAL="${SBOMVAL:-$HOME/sbomval/bin}"
 results=()
 for t in 03-no-empty-inputs 04-roots-equal-inputs 05-no-host-paths 01-spdx-validate 02-ntia-conformance; do
   echo "=== $t ($(date +%T))"
-  if "$HERE/$t.sh" "$WORK"; then results+=("PASS $t"); else results+=("FAIL $t"); fi
+  if bash "$HERE/$t.sh" "$WORK"; then results+=("PASS $t"); else results+=("FAIL $t"); fi
 done
 echo "=== 06-validators-negative-control ($(date +%T))"
-if "$HERE/06-validators-negative-control.sh"; then results+=("PASS 06-validators-negative-control"); else results+=("FAIL 06-validators-negative-control"); fi
+if bash "$HERE/06-validators-negative-control.sh"; then results+=("PASS 06-validators-negative-control"); else results+=("FAIL 06-validators-negative-control"); fi
 
 echo
 echo "=== summary ($(date +%T))"

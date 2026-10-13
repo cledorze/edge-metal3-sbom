@@ -3,7 +3,7 @@
 # Two checks, as on the page: the text of the document, and the names of the roots. An OS layer scanned
 # without --source-name is named after its mount point, and its SPDX identifier repeats the path in every
 # relationship of that layer (observed on the 2026-10-09 document: 1 and 1; on the replayed one: 0 and 0).
-# Usage: tests/05-no-host-paths.sh [WORK]
+# Usage: bash tests/05-no-host-paths.sh [WORK]
 set -euo pipefail
 WORK="${1:-${WORK:-$PWD}}"
 cd "$WORK"

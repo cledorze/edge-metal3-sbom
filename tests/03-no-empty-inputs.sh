@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Test 3: every per-layer SBOM has at least one package (runbook, section 8 checklist).
 # An empty input is a scan that failed silently (a binary that is not an image, a registry pull that returned nothing).
-# Usage: tests/03-no-empty-inputs.sh [WORK]
+# Usage: bash tests/03-no-empty-inputs.sh [WORK]
 set -euo pipefail
 WORK="${1:-${WORK:-$PWD}}"
 cd "$WORK"

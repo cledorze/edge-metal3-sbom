@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Test 2: NTIA minimum elements of the global SBOM (runbook, section 7).
 # ntia-checker is an offline check of the 2021 NTIA minimum elements; it is not a test of any consumer tool.
-# Usage: tests/02-ntia-conformance.sh [WORK]
+# Usage: bash tests/02-ntia-conformance.sh [WORK]
 # Env:   SBOMVAL = bin directory of the validation venv (default: $HOME/sbomval/bin)
 set -euo pipefail
 WORK="${1:-${WORK:-$PWD}}"

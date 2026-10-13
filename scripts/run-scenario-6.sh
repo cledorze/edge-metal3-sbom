@@ -12,7 +12,7 @@
 # images. The validation (section 7) is not run here: see tests/run-all.sh.
 #
 # Usage: set the variables below in the environment (or edit them), then
-#   scripts/run-scenario-6.sh 2>&1 | tee "$WORK.log"
+#   bash scripts/run-scenario-6.sh 2>&1 | tee "$WORK.log"
 set -euo pipefail
 
 # --- section 1, variables -------------------------------------------------------------------------
