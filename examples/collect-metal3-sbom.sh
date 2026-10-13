@@ -113,7 +113,7 @@ echo ">>> Layer 2: EIB tool + embedded container images"
 # Detect EIB image from podman history or metal3-demo defaults
 # The EIB config does NOT contain the tool image ref — it's in the Ansible role defaults
 # EDGE_VERSION picks the EIB image of the latest z-release (see
-# scenarios/06-full-sbom-metal3-stack-edge35-edge36.md). EIB_CONTAINER_IMAGE wins.
+# docs/edge-release-values.md). EIB_CONTAINER_IMAGE wins.
 EDGE_VERSION="${EDGE_VERSION:-3.5}"
 case "${EDGE_VERSION}" in
   3.5) EIB_DEFAULT="registry.suse.com/edge/3.5/edge-image-builder:1.3.3" ;;

@@ -67,7 +67,7 @@ TURTLES_PROVIDERS_CHART=306.0.7+up0.26.2
 SLMICRO_VERSION=6.2
 ```
 
-`scripts/collect-metal3-sbom.sh` reads `EDGE_VERSION` (default `3.5`) to pick the EIB image of
+`examples/collect-metal3-sbom.sh` reads `EDGE_VERSION` (default `3.5`) to pick the EIB image of
 Layer 2. `EIB_CONTAINER_IMAGE` still overrides it.
 
 ## Changes per layer
