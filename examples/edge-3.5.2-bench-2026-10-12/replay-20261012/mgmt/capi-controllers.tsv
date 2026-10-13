@@ -1,0 +1,8 @@
+capm3-system	registry.suse.com/rancher/cluster-api-provider-metal3:v1.10.4 
+cattle-capi-system	registry.rancher.com/rancher/cluster-api-controller:v1.10.6 
+cattle-turtles-system	registry.rancher.com/rancher/turtles:v0.25.8 
+metal3-ipam-system	registry.rancher.com/rancher/ip-address-manager:v1.10.4 
+metal3-system	registry.suse.com/edge/3.5/baremetal-operator:0.11.2.0 
+metal3-system	registry.suse.com/edge/3.5/ironic:32.0.0.1 registry.suse.com/edge/3.5/ironic:32.0.0.1 registry.suse.com/edge/3.5/ironic:32.0.0.1 
+rke2-bootstrap-system	registry.suse.com/rancher/cluster-api-provider-rke2-bootstrap:v0.21.1 
+rke2-control-plane-system	registry.suse.com/rancher/cluster-api-provider-rke2-controlplane:v0.21.1 

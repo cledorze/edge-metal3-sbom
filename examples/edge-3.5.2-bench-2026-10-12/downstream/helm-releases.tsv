@@ -1,0 +1,7 @@
+kube-system	rke2-canal	rke2-canal-v3.31.3-build2026020600	v3.31.3	deployed
+kube-system	rke2-coredns	rke2-coredns-1.45.201	1.13.1	deployed
+kube-system	rke2-ingress-nginx	rke2-ingress-nginx-4.14.302	1.14.3	deployed
+kube-system	rke2-metrics-server	rke2-metrics-server-3.13.007	0.8.0	deployed
+kube-system	rke2-runtimeclasses	rke2-runtimeclasses-0.1.000	0.1.0	deployed
+kube-system	rke2-snapshot-controller	rke2-snapshot-controller-4.2.001	v8.4.0	deployed
+kube-system	rke2-snapshot-controller-crd	rke2-snapshot-controller-crd-4.2.001	v8.4.0	deployed

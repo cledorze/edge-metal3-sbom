@@ -1,0 +1,22 @@
+== start 15:35:00 sha 4b89e56a1ffb870a
+
+real	50m56,135s
+user	49m36,753s
+sys	0m11,765s
+pyspdxtools rc=0
+2021 NTIA SBOM Minimum Elements Conformance Results
+
+Conformant: True
+
+Requirement                                    | Status
+-------------------------------------------------------
+All component names provided?                  | True
+All component versions provided?               | True
+All component identifiers provided?            | True
+All component suppliers provided?              | True
+SBOM author name provided?                     | True
+SBOM creation timestamp provided?              | True
+Dependency relationships provided?             | True
+
+ntia rc=0
+== end 17:13:20

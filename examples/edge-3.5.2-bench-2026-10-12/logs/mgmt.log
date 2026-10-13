@@ -1,0 +1,83 @@
+== start 14:16:38 syft 1.42.3
+== layer 1: OS of the management image
+VERSION_ID="16.0"
+SUSE_PRETTY_NAME="SUSE Linux Micro 6.2"
+os packages: 555
+== layer 2: EIB tool image (build provenance, not in the global SBOM)
+eib tool packages: 1584
+== layer 3: RKE2
+management-cluster	v1.34.4+rke2r1	SUSE Linux Enterprise Server 16.0
+rke2 release image list: 67
+== layer 4: Helm releases
+cert-manager	cert-manager	cert-manager-v1.19.2	v1.19.2	deployed
+cattle-fleet-system	fleet	fleet-108.0.3+up0.14.3	0.14.3	deployed
+cattle-fleet-local-system	fleet-agent-local	fleet-agent-local-v0.0.0+s-dfbc90355965a055db28e012dee44ed27d8a676bab05578c0095ddf628771		deployed
+cattle-fleet-system	fleet-crd	fleet-crd-108.0.3+up0.14.3	0.14.3	deployed
+metal3-system	metal3	metal3-305.0.23+up0.13.1	0.13.0	deployed
+cattle-system	rancher	rancher-2.13.3	v2.13.3	deployed
+cattle-turtles-system	rancher-turtles	rancher-turtles-108.0.4+up0.25.4	0.25.4	deployed
+cattle-turtles-system	rancher-turtles-providers	rancher-turtles-providers-305.0.5+up0.25.4	0.25.4	deployed
+cattle-system	rancher-webhook	rancher-webhook-108.0.3+up0.9.3	0.9.3	deployed
+kube-system	rke2-calico	rke2-calico-v3.31.300	v3.31.3	deployed
+kube-system	rke2-calico-crd	rke2-calico-crd-v3.31.300		deployed
+kube-system	rke2-coredns	rke2-coredns-1.45.201	1.13.1	deployed
+kube-system	rke2-ingress-nginx	rke2-ingress-nginx-4.14.302	1.14.3	deployed
+kube-system	rke2-metrics-server	rke2-metrics-server-3.13.007	0.8.0	deployed
+kube-system	rke2-runtimeclasses	rke2-runtimeclasses-0.1.000	0.1.0	deployed
+kube-system	rke2-snapshot-controller	rke2-snapshot-controller-4.2.001	v8.4.0	deployed
+kube-system	rke2-snapshot-controller-crd	rke2-snapshot-controller-crd-4.2.001	v8.4.0	deployed
+cattle-system	system-upgrade-controller	system-upgrade-controller-108.0.0	v0.17.0	deployed
+== layer 6: CAPI and Metal3 CRDs and controllers
+crds: 41
+capm3-system	registry.suse.com/rancher/cluster-api-provider-metal3:v1.10.4 
+cattle-capi-system	registry.rancher.com/rancher/cluster-api-controller:v1.10.6 
+cattle-turtles-system	registry.rancher.com/rancher/turtles:v0.25.4 
+metal3-ipam-system	registry.rancher.com/rancher/ip-address-manager:v1.10.4 
+metal3-system	registry.suse.com/edge/3.5/baremetal-operator:0.11.2.0 
+metal3-system	registry.suse.com/edge/3.5/ironic:32.0.0.1 registry.suse.com/edge/3.5/ironic:32.0.0.1 registry.suse.com/edge/3.5/ironic:32.0.0.1 
+rke2-bootstrap-system	registry.suse.com/rancher/cluster-api-provider-rke2-bootstrap:v0.21.1 
+rke2-control-plane-system	registry.suse.com/rancher/cluster-api-provider-rke2-controlplane:v0.21.1 
+== layer 5: container images of every running and init container
+images: 35
+   183  docker.io/rancher/mirrored-calico-cni:v3.31.3
+   144  docker.io/rancher/mirrored-calico-kube-controllers:v3.31.3
+   214  docker.io/rancher/mirrored-calico-node:v3.31.3
+   161  docker.io/rancher/mirrored-calico-operator:v1.40.3
+     6  docker.io/rancher/mirrored-calico-pod2daemon-flexvol:v3.31.3
+    87  docker.io/rancher/mirrored-calico-typha:v3.31.3
+    98  index.docker.io/rancher/hardened-etcd:v3.6.7-k3s1-build20260126
+   876  index.docker.io/rancher/hardened-kubernetes:v1.34.4-rke2r1-build20260210
+   174  index.docker.io/rancher/rke2-cloud-provider:v1.34.4-0.20260211145917-c6017918a65c-build20260211
+    77  quay.io/jetstack/cert-manager-cainjector:v1.19.2
+   168  quay.io/jetstack/cert-manager-controller:v1.19.2
+    97  quay.io/jetstack/cert-manager-webhook:v1.19.2
+    47  rancher/hardened-cluster-autoscaler:v1.10.3-build20260206
+   247  rancher/hardened-coredns:v1.14.1-build20260206
+    98  rancher/hardened-k8s-metrics-server:v0.8.1-build20260206
+    97  rancher/hardened-snapshot-controller:v8.4.0-build20260205
+   363  rancher/klipper-helm:v0.9.14-build20260210
+   296  rancher/nginx-ingress-controller:v1.14.3-hardened2
+   106  registry.rancher.com/rancher/cluster-api-controller:v1.10.6
+   213  registry.rancher.com/rancher/fleet-agent:v0.14.3
+   504  registry.rancher.com/rancher/fleet:v0.14.3
+    92  registry.rancher.com/rancher/ip-address-manager:v1.10.4
+  2025  registry.rancher.com/rancher/rancher:v2.13.3
+   113  registry.rancher.com/rancher/rancher-webhook:v0.9.3
+    82  registry.rancher.com/rancher/scc-operator:v0.3.1
+   698  registry.rancher.com/rancher/shell:v0.6.2
+    68  registry.rancher.com/rancher/system-upgrade-controller:v0.17.0
+   124  registry.rancher.com/rancher/turtles:v0.25.4
+   182  registry.suse.com/edge/3.5/baremetal-operator:0.11.2.0
+   683  registry.suse.com/edge/3.5/ironic:32.0.0.1
+    71  registry.suse.com/edge/3.5/ironic-ipa-downloader:3.0.11
+   179  registry.suse.com/rancher/cluster-api-addon-provider-fleet:v0.12.0
+    99  registry.suse.com/rancher/cluster-api-provider-metal3:v1.10.4
+   114  registry.suse.com/rancher/cluster-api-provider-rke2-bootstrap:v0.21.1
+   114  registry.suse.com/rancher/cluster-api-provider-rke2-controlplane:v0.21.1
+== global SBOM: OS + images (merge of scenario 7, section 6)
+sum of inputs:   9455
+global packages: 8482
+DESCRIBES roots: 36 (inputs: 36)
+empty inputs:    0
+-rw-r--r--. 1 tofix tofix 100259339 Oct  9 16:19 sbom-global.spdx.json
+MGMT_SBOM_DONE 14:19:26

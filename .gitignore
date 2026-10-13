@@ -1,0 +1,11 @@
+# Output directory of the runbook when run from the repository
+work/
+# Cluster credentials written by runbook section 4: never commit them
+kubeconfig
+**/kubeconfig
+# Raw images and large SBOMs
+*.raw
+*.iso
+# Validation venv
+sbomval/
+.venv/

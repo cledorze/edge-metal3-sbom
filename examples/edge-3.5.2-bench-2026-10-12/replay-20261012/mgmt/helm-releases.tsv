@@ -1,0 +1,18 @@
+cert-manager	cert-manager	cert-manager-v1.19.2	v1.19.2	deployed
+cattle-fleet-system	fleet	fleet-108.0.3+up0.14.3	0.14.3	deployed
+cattle-fleet-local-system	fleet-agent-local	fleet-agent-local-v0.0.0+s-dfbc90355965a055db28e012dee44ed27d8a676bab05578c0095ddf628771		deployed
+cattle-fleet-system	fleet-crd	fleet-crd-108.0.3+up0.14.3	0.14.3	deployed
+metal3-system	metal3	metal3-305.0.23+up0.13.1	0.13.0	deployed
+cattle-system	rancher	rancher-2.13.3	v2.13.3	deployed
+cattle-turtles-system	rancher-turtles	rancher-turtles-108.0.8+up0.25.8	0.25.8	deployed
+cattle-turtles-system	rancher-turtles-providers	rancher-turtles-providers-305.0.5+up0.25.4	0.25.4	deployed
+cattle-system	rancher-webhook	rancher-webhook-108.0.3+up0.9.3	0.9.3	deployed
+kube-system	rke2-calico	rke2-calico-v3.31.300	v3.31.3	deployed
+kube-system	rke2-calico-crd	rke2-calico-crd-v3.31.300		deployed
+kube-system	rke2-coredns	rke2-coredns-1.45.201	1.13.1	deployed
+kube-system	rke2-ingress-nginx	rke2-ingress-nginx-4.14.302	1.14.3	deployed
+kube-system	rke2-metrics-server	rke2-metrics-server-3.13.007	0.8.0	deployed
+kube-system	rke2-runtimeclasses	rke2-runtimeclasses-0.1.000	0.1.0	deployed
+kube-system	rke2-snapshot-controller	rke2-snapshot-controller-4.2.001	v8.4.0	deployed
+kube-system	rke2-snapshot-controller-crd	rke2-snapshot-controller-crd-4.2.001	v8.4.0	deployed
+cattle-system	system-upgrade-controller	system-upgrade-controller-108.0.0	v0.17.0	deployed
